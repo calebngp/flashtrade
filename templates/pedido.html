@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Pedido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #E1f5fe; /* Amarillo suave */
+            color: #142157;
+        }
+        .form-container { 
+            width: 400px; 
+            margin: auto; 
+            background: #142157; 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+            color: white;
+        }
+        .input-group {
+            margin-bottom: 15px; 
+            box-sizing: border-box; /* Asegura que padding y border se cuenten dentro del tamaño total */
+        }
+
+        .input-group label { 
+            display: block; 
+            font-weight: bold; 
+            margin-bottom: 5px; 
+            box-sizing: border-box; /* Para asegurar que padding no afecte el ancho */
+        }
+
+        .input-group input { 
+            width: 100%; 
+            padding: 8px; 
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+            box-sizing: border-box; /* Para asegurar que padding y border no causen desbordes */
+        }
+        
+        .button { 
+            background-color: #fb8500; 
+            color: white; 
+            padding: 10px; 
+            text-align: center; 
+            text-decoration: none; 
+            display: block; 
+            width: 100%; 
+            border: none; 
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #d17915;
+        }
+        .product-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .product-container img {
+            width: 60px;
+            height: 60px;
+            margin-right: 10px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Formulario de Pedido</h1>
+        <form action="/pedido" method="POST">
+            <div class="input-group">
+                <label for="name">Nombre:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="input-group">
+                <label for="phone">Número de Teléfono:</label>
+                <input type="text" id="phone" name="phone" required>
+            </div>
+            <div class="input-group">
+                <label for="cedula">Cédula:</label>
+                <input type="text" id="cedula" name="cedula" required>
+            </div>
+
+            <h3>Detalles del Pedido</h3>
+            <div id="orderDetails"></div>
+            
+            <p><strong>Total:</strong> $<span id="total_price">0.00</span></p>
+            <input type="hidden" name="productName" id="hiddenProductName">
+            <input type="hidden" name="productPrice" id="hiddenProductPrice">
+            <input type="hidden" name="cantidad" id="hiddenCantidad"> <!-- Nuevo campo oculto para las cantidades -->
+            <input type="hidden" name="total_price" id="hiddenTotal_price">
+
+            <button type="submit" class="button">Enviar Pedido</button>
+        </form>
+    </div>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let total = 0;
+        let orderDetails = document.getElementById('orderDetails');
+    
+        if (cart.length > 0) {
+            cart.forEach(item => {
+                // Asegúrate de que la cantidad sea un número válido y no vacío
+                item.quantity = item.quantity === "" || isNaN(item.quantity) ? 0 : parseInt(item.quantity);
+    
+                // Calcula el total por cada producto considerando su cantidad
+                let totalItem = item.price * item.quantity;
+                total += totalItem;
+    
+                let productHTML = `
+                    <div class="product-container">
+                        <img src="${item.img}" alt="${item.product}">
+                        <div>
+                            <p><strong>${item.product}</strong></p>
+                            <p>Precio: ${item.price.toLocaleString()} Gs</p>
+                            <p>Cantidad: ${item.quantity}</p>
+                            <p>Total por producto: ${totalItem.toLocaleString()} Gs</p>
+                        </div>
+                    </div>
+                `;
+                orderDetails.innerHTML += productHTML;
+            });
+    
+            // Muestra el total acumulado
+            document.getElementById('total_price').textContent = total.toLocaleString() + " Gs";
+    
+            // Enviar los datos ocultos del formulario
+            document.getElementById('hiddenProductName').value = cart.map(item => item.product).join(',');
+            document.getElementById('hiddenProductPrice').value = cart.map(item => item.price).join(',');
+            document.getElementById('hiddenCantidad').value = cart.map(item => item.quantity).join(','); // Llenar el campo oculto de cantidades
+            document.getElementById('hiddenTotal_price').value = total.toFixed(0);
+        } else {
+            orderDetails.innerHTML = "<p>No hay productos en el carrito.</p>";
+    
+            // Si el carrito está vacío, aseguramos que los campos ocultos estén vacíos
+            document.getElementById('hiddenProductName').value = '';
+            document.getElementById('hiddenProductPrice').value = '';
+            document.getElementById('hiddenCantidad').value = ''; // Asegurar que el campo oculto de cantidades esté vacío
+            document.getElementById('hiddenTotal_price').value = '';
+        }
+    
+        // Validación al enviar el formulario
+        document.querySelector("form").addEventListener("submit", function() {
+            // Validar cantidades nuevamente antes de enviar
+            cart.forEach(item => {
+                item.quantity = item.quantity === "" || isNaN(item.quantity) ? 0 : parseInt(item.quantity);
+            });
+    
+            // Guardar los datos corregidos
+            localStorage.setItem('cart', JSON.stringify(cart));
+            localStorage.removeItem("cart"); // Limpiar el carrito después de enviar el pedido
+        });
+    </script>
+</body>
+</html>

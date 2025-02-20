@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Productos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #E1f5fe; /* Amarillo suave */
+            color: #142157;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center; /* Centra el texto horizontalmente */
+            margin-top: 20px;
+        }
+
+        .product h3{
+            margin-top: 0px;
+            margin-bottom: 10px;
+        }
+        .product p{
+            margin-top: 10px;
+        }
+        #product-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; /* Centra los productos horizontalmente */
+            margin: 0 auto; /* Centra el contenedor en la página */
+            max-width: 1200px; /* Opcional, para evitar que los productos se estiren demasiado en pantallas grandes */
+        }
+        .product {
+            margin: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            display: inline-block;
+            width: 200px;
+            height: 275px;
+            background-color: #142157; /* Fondo más claro para cada producto */
+            text-align: center;
+            color: aliceblue;
+        }
+        .product img {
+            width: 100%;  /* Se ajusta al ancho del contenedor */
+            height: auto; /* Mantiene la proporción */
+            max-width: 150px; /* Ajusta el tamaño máximo si lo deseas */
+            max-height: 150px; /* Ajusta el tamaño máximo para mantener 1:1 */
+            object-fit: contain; /* Evita recortes, agregará espacio vacío si es necesario */
+            background-color: white; /* Opcional: para ver mejor el ajuste */
+            border-radius: 5px;
+        }
+        .button {
+            background-color: #fb8500;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            width: 60%;
+        }
+        .button:hover {
+            background-color: #d17915;
+        }
+
+        /* Estilo del ícono de carrito en la parte superior */
+        .cart-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #fb8500;
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            z-index: 20;
+        }
+
+        .cart-dropdown {
+            display: none;
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            background-color: #FFD966;
+            width: 350px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .cart-icon:hover + .cart-dropdown,
+        .cart-dropdown:hover {
+            display: block;
+        }
+
+        .cart-dropdown ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .cart-dropdown ul li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .cart-dropdown ul li img {
+            width: 40px;
+            margin-right: 10px;
+        }
+
+        .cart-dropdown button {
+            background-color: #fb8500;
+            color: white;
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .cart-dropdown button:hover {
+            background-color: #d17915;
+        }
+
+        .cart-dropdown .total-price {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        /* Estilo de la notificación */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #142157;
+            color: aliceblue;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: none;
+            z-index: 100;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .notification.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .notification.hide {
+            opacity: 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Catálogo de Productos</h1>
+
+    <!-- Ícono del carrito -->
+    <div class="cart-icon">
+        🛒
+    </div>
+
+    <!-- Carrito desplegable -->
+    <div class="cart-dropdown">
+        <h2>Carrito</h2>
+        <ul id="cartList"></ul>
+        <p class="total-price">Total: <span id="totalPrice">0</span> Gs</p>
+        <a href="{{ url_for('pedido') }}" class="button">Ir a Pedido</a>
+        <button onclick="clearCart()">Vaciar carrito</button>
+    </div>
+
+    <div id="product-container">
+        <script>
+            const products = [
+                { name: "Entrenador de tenis", price: 95000, img: "static/tenistrainer/1.jpg" },
+                { name: "Control velocidad Crucero", price: 75000, img: "static/controlcrucero/1.jpg" },
+                { name: "Cubierta para pedal", price: 50000, img: "static/cubiertapedal/2.jpg" },
+                { name: "Almohadilla para cambio", price: 45000, img: "static/almohadillaparacambio/1.jpg" },
+                { name: "Cubierta para arranque", price: 55000, img: "static/cubiertadearranque/1.jpg" }
+            ];
+
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            function addToCart(product, price, img) {
+                let existingProduct = cart.find(item => item.product === product);
+                if (existingProduct) {
+                    existingProduct.quantity += 1;
+                } else {
+                    cart.push({ product, price, img, quantity: 1 });
+                }
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCart();
+            }
+
+            function updateQuantity(product, change) {
+                let item = cart.find(item => item.product === product);
+                if (item) {
+                    item.quantity += change;
+                    if (item.quantity <= 0) {
+                        cart = cart.filter(i => i.product !== product);
+                    }
+                }
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCart();
+            }
+
+            function formatPrice(price) {
+                return price.toLocaleString('es-ES');
+            }
+
+            function updateCart() {
+                let cartList = document.getElementById('cartList');
+                let totalPriceElement = document.getElementById('totalPrice');
+                cartList.innerHTML = '';
+                let totalGeneral = 0;
+
+                cart.forEach(item => {
+                    let totalItem = item.price * item.quantity;
+                    totalGeneral += totalItem;
+                    let listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <img src="${item.img}" width="50" alt="${item.product}">
+                        <strong>${item.product}</strong> - 
+                        ${formatPrice(item.price)} Gs (c/u) - 
+                        <button onclick="updateQuantity('${item.product}', -1)">➖</button>
+                        ${item.quantity}
+                        <button onclick="updateQuantity('${item.product}', 1)">➕</button> 
+                        - ${formatPrice(totalItem)} Gs
+                    `;
+                    cartList.appendChild(listItem);
+                });
+
+                totalPriceElement.textContent = formatPrice(totalGeneral) + " Gs";
+            }
+
+            function clearCart() {
+                cart = [];
+                localStorage.removeItem('cart');
+                updateCart();
+            }
+
+            let productContainer = document.getElementById('product-container');
+            products.forEach((p) => {
+                let div = document.createElement('div');
+                div.className = 'product';
+                div.innerHTML = `
+                    <img src="${p.img}" alt="${p.name}">
+                    <p>${p.name}</p>
+                    <h3>${formatPrice(p.price)} Gs</h3>
+                    <button class="button" onclick="addToCart('${p.name}', ${p.price}, '${p.img}')">Añadir al carrito</button>
+                `;
+                productContainer.appendChild(div);
+            });
+
+            window.onload = () => {
+                updateCart();
+            };
+        </script>
+        <script>
+            // Función para mostrar la notificación
+            function showNotification(product) {
+                let notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.innerText = `${product} añadido al carrito!`;
+                
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.classList.add('show');
+                }, 10); // De inmediato, mostrará la notificación.
+
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    notification.classList.add('hide');
+                    setTimeout(() => notification.remove(), 500); // Elimina la notificación después de desaparecer
+                }, 2000); // La notificación se oculta después de 2 segundos.
+            }
+
+            // Actualizar la función `addToCart` para incluir la notificación
+            function addToCart(product, price, img) {
+                let existingProduct = cart.find(item => item.product === product);
+                if (existingProduct) {
+                    existingProduct.quantity += 1;
+                } else {
+                    cart.push({ product, price, img, quantity: 1 });
+                }
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCart();
+                showNotification(product);  // Muestra la notificación cuando se agrega un producto
+            }
+
+        </script>
+    </div>
+    <footer style="text-align: center; padding: 20px; background-color: #142157; color: aliceblue;">
+        <p style="font-size: 14px; font-weight: 300;">Ubicación del depósito: Caraguatay entre Chivato y Monseñor, Lambaré, Paraguay</p>
+        <p style="font-size: 14px; font-weight: 300;">Teléfono: +595 985 924184</p>
+        <p style="font-size: 14px; font-weight: 300;">No contamos con tienda física, pero facilitamos nuestra dirección de depósito.</p>
+        <p style="font-size: 14px; font-weight: 300;">Página en construcción.</p>
+    </footer>    
+    
+</body>
+</html>

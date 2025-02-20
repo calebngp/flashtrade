@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Pedido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #E1f5fe;
+            color: #142157;
+            text-align: center;
+        }
+        .container {
+            width: 400px;
+            margin: 50px auto;
+            background: #142157;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            color: white;
+        }
+        h1, h2 {
+            color: #E1f5fe;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .button {
+            background-color: #fb8500;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            width: 60%;
+        }
+        .button:hover {
+            background-color: #d17915;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pedido Confirmado</h1>
+        <p><strong>Nombre:</strong> {{ nombre }}</p>
+        <p><strong>Teléfono:</strong> {{ telefono }}</p>
+        <p><strong>Cédula:</strong> {{ cedula }}</p>
+        <h2>Productos</h2>
+        <ul>
+            {% for producto, precio in productos_precios %}
+                <li>{{ producto }} - Gs. {{ precio }}</li>
+            {% endfor %}
+        </ul>
+        <p><strong>Total:</strong> Gs. {{ total_price }}</p>
+        <a href="/" class="button">Volver al catálogo</a>
+        
+        <script>
+            setTimeout(function() {
+                let mensaje = "Hola%20Flash%20Trade,%20este%20es%20mi%20pedido:%0D%0A" +
+                    "Nombre:%20{{ nombre }}%0D%0A" +
+                    "Teléfono:%20{{ telefono }}%0D%0A" +
+                    "Cédula:%20{{ cedula }}%0D%0A" +
+                    "Productos:%0D%0A";
+        
+                // Recorremos los productos y los agregamos al mensaje
+                {% for producto, precio in productos_precios %}
+                    mensaje += "{{ producto }}%20-%20Gs.%20{{ precio }}%0D%0A";
+                {% endfor %}
+        
+                // Agregamos el total al mensaje
+                mensaje += "Total:%20Gs.%20{{ total_price }}%0D%0A" +
+                    "Por%20favor,%20envíenme%20información%20para%20coordinar%20la%20entrega.";
+        
+                // Redirigimos a WhatsApp con el mensaje completo
+                window.location.href = "https://wa.me/595985924184?text=" + mensaje;
+            }, 5000);  // Espera 5 segundos antes de redirigir
+        </script>
+        
+    </div>
+</body>
+</html>
