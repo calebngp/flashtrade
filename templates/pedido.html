@@ -69,6 +69,14 @@
             border-radius: 5px;
             object-fit: cover;
         }
+
+        @media (max-width: 600px) {
+            .form-container {
+                width: 85%; /* Ajusta el ancho del formulario para pantallas pequeñas */
+                margin: auto; /* Centra el formulario horizontalmente */
+                overflow-y: auto; /* Permite el desplazamiento vertical si el contenido es demasiado alto */
+            }
+        }
     </style>
 </head>
 <body>
@@ -91,7 +99,7 @@
             <h3>Detalles del Pedido</h3>
             <div id="orderDetails"></div>
             
-            <p><strong>Total:</strong> $<span id="total_price">0.00</span></p>
+            <p><strong>Total:</strong> <span id="total_price">0.00</span></p>
             <input type="hidden" name="productName" id="hiddenProductName">
             <input type="hidden" name="productPrice" id="hiddenProductPrice">
             <input type="hidden" name="cantidad" id="hiddenCantidad"> <!-- Nuevo campo oculto para las cantidades -->
@@ -105,33 +113,33 @@
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let total = 0;
         let orderDetails = document.getElementById('orderDetails');
-    
+
         if (cart.length > 0) {
             cart.forEach(item => {
                 // Asegúrate de que la cantidad sea un número válido y no vacío
                 item.quantity = item.quantity === "" || isNaN(item.quantity) ? 0 : parseInt(item.quantity);
-    
+
                 // Calcula el total por cada producto considerando su cantidad
                 let totalItem = item.price * item.quantity;
                 total += totalItem;
-    
+
                 let productHTML = `
                     <div class="product-container">
                         <img src="${item.img}" alt="${item.product}">
                         <div>
                             <p><strong>${item.product}</strong></p>
-                            <p>Precio: ${item.price.toLocaleString()} Gs</p>
+                            <p>Precio: ${item.price.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")} Gs</p>
                             <p>Cantidad: ${item.quantity}</p>
-                            <p>Total por producto: ${totalItem.toLocaleString()} Gs</p>
+                            <p>Total por producto: ${totalItem.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")} Gs</p>
                         </div>
                     </div>
                 `;
                 orderDetails.innerHTML += productHTML;
             });
-    
+
             // Muestra el total acumulado
-            document.getElementById('total_price').textContent = total.toLocaleString() + " Gs";
-    
+            document.getElementById('total_price').textContent = total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " Gs";
+
             // Enviar los datos ocultos del formulario
             document.getElementById('hiddenProductName').value = cart.map(item => item.product).join(',');
             document.getElementById('hiddenProductPrice').value = cart.map(item => item.price).join(',');
@@ -139,21 +147,21 @@
             document.getElementById('hiddenTotal_price').value = total.toFixed(0);
         } else {
             orderDetails.innerHTML = "<p>No hay productos en el carrito.</p>";
-    
+
             // Si el carrito está vacío, aseguramos que los campos ocultos estén vacíos
             document.getElementById('hiddenProductName').value = '';
             document.getElementById('hiddenProductPrice').value = '';
             document.getElementById('hiddenCantidad').value = ''; // Asegurar que el campo oculto de cantidades esté vacío
             document.getElementById('hiddenTotal_price').value = '';
         }
-    
+
         // Validación al enviar el formulario
         document.querySelector("form").addEventListener("submit", function() {
             // Validar cantidades nuevamente antes de enviar
             cart.forEach(item => {
                 item.quantity = item.quantity === "" || isNaN(item.quantity) ? 0 : parseInt(item.quantity);
             });
-    
+
             // Guardar los datos corregidos
             localStorage.setItem('cart', JSON.stringify(cart));
             localStorage.removeItem("cart"); // Limpiar el carrito después de enviar el pedido
