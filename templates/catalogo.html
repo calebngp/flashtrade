@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Productos</title>
+    <title>Catálogo</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -94,32 +94,32 @@
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             z-index: 10;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-
-        .cart-icon:hover + .cart-dropdown,
-        .cart-dropdown:hover {
-            display: block;
+            max-height: 80vh; /* Limita la altura máxima al 80% de la altura de la ventana */
+            overflow-y: auto; /* Permite el desplazamiento vertical si el contenido es demasiado alto */
         }
 
         .cart-dropdown ul {
             list-style: none;
             padding: 0;
             margin: 0;
-            max-height: 300px;
-            overflow-y: auto;
+            max-height: 70vh; /* Ajusta la altura máxima de la lista */
+            overflow-y: auto; /* Permite el desplazamiento vertical si el contenido es demasiado alto */
         }
 
         .cart-dropdown ul li {
             display: flex;
-            align-items: center;
+            flex-direction: column; /* Cambia la dirección del flujo de los elementos a columna */
+            align-items: flex-start; /* Alinea los elementos al inicio del contenedor */
             margin-bottom: 10px;
+            padding: 10px; /* Añade un padding para separar los elementos del borde */
+            border: 1px solid #ddd; /* Añade un borde para mejor visualización */
+            border-radius: 5px; /* Añade un borde redondeado */
+            background-color: #f9f9f9; /* Añade un fondo claro */
         }
 
-        .cart-dropdown ul li img {
-            width: 40px;
-            margin-right: 10px;
+        .cart-dropdown button {
+            background-color: #fb8500;
+            color: white;
         }
 
         .cart-dropdown button {
@@ -163,21 +163,84 @@
             opacity: 0;
             display: none;
         }
+
+        @media (max-width: 600px) {
+            .cart-dropdown {
+                width: 85%; /* Ajusta el ancho del carrito para pantallas pequeñas */
+                right: 2%;  /* Centra el carrito horizontalmente */
+                top: 60px;  /* Ajusta la posición superior si es necesario */
+                overflow-y: auto; /* Permite el desplazamiento vertical si el contenido es demasiado alto */
+            }
+        }
+
+        .cart-item {
+            display: flex;
+            flex-direction: column; /* Cambia la dirección del flujo de los elementos a columna */
+            align-items: flex-start; /* Alinea los elementos al inicio del contenedor */
+            margin-bottom: 10px;
+            padding: 10px; /* Añade un padding para separar los elementos del borde */
+            border: 1px solid #ddd; /* Añade un borde para mejor visualización */
+            border-radius: 5px; /* Añade un borde redondeado */
+            background-color: #f9f9f9; /* Añade un fondo claro */
+        }
+
+        .item-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px; /* Añade un margen inferior para separar de las acciones */
+            width: 100%; /* Asegura que ocupe todo el ancho del contenedor */
+        }
+
+        .item-details {
+            margin-left: 10px;
+            flex-grow: 1; /* Permite que el texto ocupe el espacio disponible */
+        }
+
+        .item-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Distribuye los botones de manera uniforme */
+            width: 100%; /* Asegura que ocupe todo el ancho del contenedor */
+        }
+
+        .item-actions button {
+            margin: 0 5px;
+        }
+
+        .item-price, .item-quantity, .item-total {
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
-    <h1>Catálogo de Productos</h1>
+    <h1>Catálogo</h1>
 
     <!-- Ícono del carrito -->
-    <div class="cart-icon">
-        🛒
+    <div class="cart-icon" onclick="toggleCart()">
+        <img src="static/svg/carrito.svg" alt="Carrito de compras" width="30" height="30" style="filter:  hue-rotate(180deg); display: block; margin: 0 auto;">
     </div>
 
     <!-- Carrito desplegable -->
-    <div class="cart-dropdown">
+    <div class="cart-dropdown" id="cartDropdown">
         <h2>Carrito</h2>
-        <ul id="cartList"></ul>
-        <p class="total-price">Total: <span id="totalPrice">0</span> Gs</p>
+        <ul id="cartList">
+            <li class="cart-item">
+                <div class="item-info">
+                    <img src="static/tenistrainer/1.jpg" width="50" alt="Entrenador de tenis">
+                    <div class="item-details">
+                        <strong>Entrenador de tenis</strong>
+                        <span class="item-price">95.000 Gs</span>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button onclick="updateQuantity('Entrenador de tenis', -1)">➖</button>
+                    <span class="item-quantity">1</span>
+                    <button onclick="updateQuantity('Entrenador de tenis', 1)">➕</button>
+                    <span class="item-total"> 95.000 Gs</span>
+                </div>
+            </li>
+        </ul>
+        <p class="total-price">Total: <span id="totalPrice">0</span></p>
         <a href="{{ url_for('pedido') }}" class="button">Ir a Pedido</a>
         <button onclick="clearCart()">Vaciar carrito</button>
     </div>
@@ -231,14 +294,21 @@
                     let totalItem = item.price * item.quantity;
                     totalGeneral += totalItem;
                     let listItem = document.createElement('li');
+                    listItem.className = 'cart-item';
                     listItem.innerHTML = `
-                        <img src="${item.img}" width="50" alt="${item.product}">
-                        <strong>${item.product}</strong> - 
-                        ${formatPrice(item.price)} Gs (c/u) - 
-                        <button onclick="updateQuantity('${item.product}', -1)">➖</button>
-                        ${item.quantity}
-                        <button onclick="updateQuantity('${item.product}', 1)">➕</button> 
-                        - ${formatPrice(totalItem)} Gs
+                        <div class="item-info">
+                            <img src="${item.img}" width="50" alt="${item.product}">
+                            <div class="item-details">
+                                <strong>${item.product}</strong>
+                                <span class="item-price">${formatPrice(item.price)} Gs</span>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button onclick="updateQuantity('${item.product}', -1)">➖</button>
+                            <span class="item-quantity">${item.quantity}</span>
+                            <button onclick="updateQuantity('${item.product}', 1)">➕</button>
+                            <span class="item-total"> ${formatPrice(totalItem)} Gs</span>
+                        </div>
                     `;
                     cartList.appendChild(listItem);
                 });
@@ -268,6 +338,15 @@
             window.onload = () => {
                 updateCart();
             };
+
+            function toggleCart() {
+                const cartDropdown = document.getElementById('cartDropdown');
+                if (cartDropdown.style.display === 'none' || cartDropdown.style.display === '') {
+                    cartDropdown.style.display = 'block';
+                } else {
+                    cartDropdown.style.display = 'none';
+                }
+            }
         </script>
         <script>
             // Función para mostrar la notificación
