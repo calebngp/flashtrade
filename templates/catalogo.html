@@ -83,6 +83,13 @@
             z-index: 20;
         }
 
+        .cart-icon img {
+            width: 40px; /* Ajusta el ancho del ícono */
+            height: 40px; /* Ajusta la altura del ícono */
+            display: block;
+            margin: 0 auto;
+        }
+
         .cart-dropdown {
             display: none;
             position: fixed;
@@ -217,7 +224,7 @@
 
     <!-- Ícono del carrito -->
     <div class="cart-icon" onclick="toggleCart()">
-        <img src="static/svg/carrito.svg" alt="Carrito de compras" width="30" height="30" style="filter:  hue-rotate(180deg); display: block; margin: 0 auto;">
+        <img src="static/svg/carrito.svg" alt="Carrito de compras">
     </div>
 
     <!-- Carrito desplegable -->
