@@ -217,6 +217,24 @@
         .item-price, .item-quantity, .item-total {
             margin-left: 10px;
         }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .button-container .button {
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .button-container .button:first-child {
+            margin-left: 0;
+        }
+
+        .button-container .button:last-child {
+            margin-right: 0;
+        }
     </style>
 </head>
 <body>
@@ -248,8 +266,10 @@
             </li>
         </ul>
         <p class="total-price">Total: <span id="totalPrice">0</span></p>
-        <a href="{{ url_for('pedido') }}" class="button">Ir a Pedido</a>
-        <button onclick="clearCart()">Vaciar carrito</button>
+        <div class="button-container">
+            <a href="{{ url_for('pedido') }}" class="button">Ir a Pedido</a>
+            <a href="#" class="button" onclick="clearCart()">Vaciar carrito</a>
+        </div>
     </div>
 
     <div id="product-container">
