@@ -14,6 +14,10 @@ PORT = os.getenv("port")
 DBNAME = os.getenv("dbname")
 
 @app.route('/')
+def home():
+    return render_template('home.html')
+
+@app.route('/catalogo')
 def catalogo():
     productos = [
         {"nombre": "Producto 1", "precio": 10.00},
@@ -151,8 +155,6 @@ def gestion_pedidos():
     except Exception as e:
         print(f"Error al obtener los pedidos: {e}")
         return "Error al cargar los pedidos", 500
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
