@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos Destacados</title>
+    <title>INICIO</title>
     <style>
         @font-face {
             font-family: 'Fastup';
@@ -186,31 +186,32 @@
             #product-container {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr); /* 2 columnas */
-                gap: 5px; /* Espacio entre los productos */
-                max-width: 300px; /* Ajusta el ancho máximo si es necesario */
+                gap: 16px;
+                max-width: 370px; /* Ajusta el ancho máximo si es necesario */
+                margin-bottom: 20px;
             }
             .product {
-                margin: 5px;
-                padding: 3px;
+                margin: 6px;
+                padding: 3.6px;
                 width: 90%; /* Ajusta el ancho del contenedor */
                 height: auto; /* Ajusta la altura automáticamente */
             }
             .product img {
-                margin-top: 5px;
-                max-width: 70px; /* Ajusta el tamaño máximo si lo deseas */
-                max-height: 70px; /* Ajusta el tamaño máximo para mantener 1:1 */
+                margin-top: 6px;
+                max-width: 110px; /* Ajusta el tamaño máximo si lo deseas */
+                max-height: 110px; /* Ajusta el tamaño máximo para mantener 1:1 */
             }
             .product h3 {
-                font-size: 14px; /* Disminuye el tamaño de la fuente */
+                font-size: 16.8px; /* Disminuye el tamaño de la fuente */
             }
             .product p {
-                font-size: 12px; /* Disminuye el tamaño de la fuente */
+                font-size: 14.4px; /* Disminuye el tamaño de la fuente */
             }
             .button {
-                margin-bottom: 5px;
-                padding: 3px;
-                width: 70%;
-                font-size: 10px; /* Disminuye el tamaño de la fuente */
+                margin-bottom: 6px;
+                padding: 3.6px;
+                width: 84%;
+                font-size: 12px; /* Disminuye el tamaño de la fuente */
             }
         }
 
@@ -291,6 +292,33 @@
         .navbar .logo .brand .up {
             color: #fb8500; /* Naranja */
         }
+        .slogan p {
+            font-family:sans-serif;
+            font-weight: Bold;
+            font-size: 36px;
+            color: #142157; /* Azul marino */
+            padding: 10px;
+        }
+        .slogan a {
+            color: aliceblue; /* Naranja */
+            text-decoration: none;
+            font-size: 24px;
+        }
+        .catalog-button {
+        display: inline-block;
+        background-color: #fb8500; /* Naranja */
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+    .catalog-button:hover {
+        background-color: #d17915;
+    }
+    .highlight {
+        color: #fb8500; /* Naranja */
+    }        
     </style>
 </head>
 <body>
@@ -301,7 +329,13 @@
         </div>
     </div>
 
-    <h1>Lo más vendido</h1>
+<!-- Slogan -->
+<div class="slogan" style="text-align: center; margin: 60px 0;">
+    <p>"No <span class="highlight">gastes</span> de más, ni <span class="highlight">esperes</span> de más."</p>
+    <a href="{{ url_for('catalogo') }}" class="catalog-button">Visite nuestro catálogo</a>
+</div>
+
+    <h1>Lo <span class="highlight">más</span> vendido</h1>
 
     <!-- Ícono del carrito -->
     <div class="cart-icon" onclick="toggleCart()">
@@ -338,8 +372,8 @@
     <div id="product-container">
         <script>
             const products = [
-                { name: "Entrenador de tenis", price: 110000, img: "static/tenistrainer/1.jpg" },
-                { name: "Entrenador de tenis", price: 111000, img: "static/tenistrainerbaseexagonal/1.jpg" },
+                { name: "Entrenador de tenis", price: 115000, img: "static/tenistrainer/1.jpg" },
+                { name: "Entrenador de tenis", price: 115000, img: "static/tenistrainerbaseexagonal/1.jpg" },
                 { name: "Interruptor inteligente Wifi", price: 65000, img: "static/interruptorinteligente/1.jpg" },
                 { name: "Juego de espejos dentales", price: 55000, img: "static/juegodeespejos/1.jpg" }
             ];
