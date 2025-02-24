@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo</title>
     <style>
+        @font-face {
+            font-family: 'Fastup';
+            src: url('static/fonts/Fastup-Regular.ttf') format('truetype');
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #E1f5fe; /* Amarillo suave */
@@ -72,8 +77,8 @@
         /* Estilo del ícono de carrito en la parte superior */
         .cart-icon {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 10px;
+            right: 10px;
             background-color: #fb8500;
             color: white;
             padding: 15px;
@@ -84,8 +89,8 @@
         }
 
         .cart-icon img {
-            width: 40px; /* Ajusta el ancho del ícono */
-            height: 40px; /* Ajusta la altura del ícono */
+            width: 30px; /* Ajusta el ancho del ícono */
+            height: 30px; /* Ajusta la altura del ícono */
             display: block;
             margin: 0 auto;
         }
@@ -235,9 +240,38 @@
         .button-container .button:last-child {
             margin-right: 0;
         }
+
+        /* Estilos para la barra de navegación */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            color: white;
+        }
+        .navbar .logo .brand {
+            font-family: 'Fastup', sans-serif;
+            font-size: 40px;
+            font-weight: Regular;
+        }
+
+        .navbar .logo .brand .fast {
+            color: #142157; /* Azul marino */
+        }
+
+        .navbar .logo .brand .up {
+            color: #fb8500; /* Naranja */
+        }
     </style>
 </head>
 <body>
+    <!-- Barra de navegación -->
+    <div class="navbar">
+        <div class="logo">
+            <span class="brand"><span class="fast">Fast</span><span class="up">up</span></span>
+        </div>
+    </div>
+
     <h1>Catálogo</h1>
 
     <!-- Ícono del carrito -->
