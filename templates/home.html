@@ -64,6 +64,20 @@
     <img src="static/SVG/carrito.svg" alt="Menú">
 </div>
 
+<!-- Carrito desplegable -->
+<div class="cart-dropdown" id="cartDropdown">
+    <div class="cart-header">
+        <h2>Carrito</h2>
+        <button style="width: 170px;" class="button" onclick="window.location.href='{{ url_for('consulta_pedido') }}'">Consultar pedido</button>
+    </div>
+    <ul id="cartList"></ul>
+    <p class="total-price">Total: <span id="totalPrice">0</span></p>
+    <div class="button-container">
+        <button class="button" onclick="window.location.href='{{ url_for('pedido') }}'">Ir a Pedido</button>
+        <button class="button" onclick="clearCart()">Vaciar carrito</button>
+    </div>
+</div>
+
 <!-- Slogan -->
 <div class="slogan">
     <div class="slogan-div1" style="display: inline-block;">
@@ -73,9 +87,10 @@
         <p class="slogan1 slogan2"><span class="highlight" id="changing-word">necesitabas</span></p>
     </div>
 </div>
+
 <div class="categories-container">
     <div class="category">
-        <h3>Accesorios para tenis</h3>
+        <h3>Tenistas</h3>
         <div class="carousel">
             <div class="carousel-inner">
                 {% for producto in accesorios_tenis %}
@@ -94,7 +109,7 @@
         </div>
     </div>
     <div class="category">
-        <h3>Para motociclista</h3>
+        <h3>Motociclista</h3>
         <div class="carousel">
             <div class="carousel-inner">
                 {% for producto in accesorios_moto %}
@@ -113,7 +128,7 @@
         </div>
     </div>
     <div class="category">
-        <h3>Decoración para el hogar</h3>
+        <h3>Decoracion Hogar</h3>
         <div class="carousel">
             <div class="carousel-inner">
                 {% for producto in decoracion_hogar %}
@@ -152,19 +167,13 @@
     </div>
 </div>
 
-<!-- Carrito desplegable -->
-<div class="cart-dropdown" id="cartDropdown">
-    <div class="cart-header">
-        <h2>Carrito</h2>
-        <button style="width: 170px;" class="button" onclick="window.location.href='{{ url_for('consulta_pedido') }}'">Consultar pedido</button>
-    </div>
-    <ul id="cartList"></ul>
-    <p class="total-price">Total: <span id="totalPrice">0</span></p>
-    <div class="button-container">
-        <button class="button" onclick="window.location.href='{{ url_for('pedido') }}'">Ir a Pedido</button>
-        <button class="button" onclick="clearCart()">Vaciar carrito</button>
-    </div>
+
+
+<div class="consulta-pedido" style="text-align: center; margin: 40px 0;">
+    <h1 class="gradient-text"></h1>
+    <button onclick="window.location.href='{{ url_for('catalogo') }}'" class="button-go-catalogo">Descubra más productos</button>
 </div>
+
 <h1>Lo <span class="highlight">más</span> vendido</h1>
 <div id="product-container">
     {% for producto in productos_mas_vendidos %}

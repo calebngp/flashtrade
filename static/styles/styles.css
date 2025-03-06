@@ -307,14 +307,14 @@ a {
     }
     .product img {
         margin-top: 6px;
-        max-width: 110px;
-        max-height: 110px;
+        max-width: 170px;
+        max-height: 170px;
     }
     .product h3 {
         font-size: 18px;
     }
     .product p {
-        font-size: 16px;
+        font-size: 18px;
     }
     .button {
         margin-bottom: 6px;
@@ -330,8 +330,46 @@ a {
         height: 35px;
         font-size: 20px;
     }
+    .button-go-catalogo {
+        background: linear-gradient(135deg, #01AEC7, #ff8149, #c980db);
+        background-size: 400% 400%;
+        animation: gradientAnimation 7s ease infinite; /* Animación más rápida */
+        color: white;
+        padding: 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        border: none;
+        border-radius: 10px;
+        width: 85%;
+        font-size: 26px;
+    }
+    .button-go-catalogo:hover {
+        background: linear-gradient(135deg, #01AEC7, #ff8149, #c980db);
+        background-size: 400% 400%;
+        animation: gradientAnimation 1s ease infinite; /* Animación más rápida */
+        color: white;
+        padding: 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        border: none;
+        border-radius: 10px;
+        width: 85%;
+        font-size: 26px;
+    }
     .category {
-        flex: 1 1 calc(50% - 40px); /* Para pantallas pequeñas */
+        background-color: #00beae;
+        color: white;
+        padding: 5px;
+        margin: 2.5px;
+        border-radius: 10px;
+        text-align: center;
+        flex: 1 1 calc(54% - 40px); /* Para pantallas pequeñas */
+        box-sizing: border-box;
+        max-width: 300px;
     }
 }
 .detalleproducto {
@@ -485,6 +523,17 @@ a {
     .slogan-div1{
         margin-left: 72px;
     }
+    .category {
+        background-color: #00beae;
+        color: white;
+        padding: 5px;
+        margin: 10px;
+        border-radius: 10px;
+        text-align: center;
+        flex: 1 1 calc(25% - 40px); /* Para pantallas grandes */
+        box-sizing: border-box;
+        max-width: 290px;
+    }
 }
 .cart-dropdown {
     width: 85%;
@@ -615,14 +664,3 @@ footer p {
     margin: 20px 0;
 }
 
-.category {
-    background-color: #00beae;
-    color: white;
-    padding: 5px;
-    margin: 10px;
-    border-radius: 10px;
-    text-align: center;
-    flex: 1 1 calc(25% - 40px); /* Para pantallas grandes */
-    box-sizing: border-box;
-    max-width: 290px;
-}
