@@ -57,7 +57,6 @@ a {
     display: inline-block;
     width: 200px;
     height: auto;
-    background-color: #00beae;
     text-align: center;
     color: white;
 }
@@ -73,7 +72,7 @@ a {
 }
 
 .button {
-    background: linear-gradient(135deg, #CFCBD2, #01aec7, #c980db);
+    background: linear-gradient(135deg, #CFCBD2, #ff8149, #c980db);
     background-size: 400% 400%;
     animation: gradientAnimation 7s ease infinite; /* Animación más rápida */
     color: white;
@@ -87,7 +86,7 @@ a {
     width: 70%;
 }
 .button-cart {
-    background: linear-gradient(135deg, #CFCBD2, #CB98ED, #8B63DA, #3C21B7);
+    background: linear-gradient( #CFCBD2, #ff8149, #c980db);
     background-size: 400% 400%;
     animation: gradientAnimation 7s ease infinite; /* Animación más rápida */
     color: white;
@@ -105,7 +104,7 @@ a {
     position: fixed;
     top: 10px;
     right: 10px;
-    background: linear-gradient(135deg, #CFCBD2, #CB98ED, #8B63DA, #3C21B7);
+    background: linear-gradient( #CFCBD2, #ff8149, #c980db);
     background-size: 400% 400%;
     animation: gradientAnimation 5s ease infinite;
     color: white;
@@ -169,10 +168,6 @@ a {
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
-}
-
-.cart-dropdown button:hover {
-    background-color: #8B63DA;
 }
 
 .cart-dropdown .total-price {
@@ -361,7 +356,7 @@ a {
         font-size: 26px;
     }
     .category {
-        background-color: #00beae;
+        background-color: #01AEC7;
         color: white;
         padding: 5px;
         margin: 2.5px;
