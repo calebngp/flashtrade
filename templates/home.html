@@ -31,21 +31,28 @@
 
         .carousel-control {
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
+            top: 30%;
             border: none;
-            padding: 10px;
+            padding: 5px;
             cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.1); /* Fondo semitransparente */
+            color: white; /* Color del texto */
+            font-size: 18px; /* Tamaño de la fuente */
+            border-radius: 50%; /* Bordes redondeados */
+            width: 30px; /* Ancho del botón */
+            height: 30px; /* Alto del botón */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(-50%); /* Centra verticalmente */
         }
 
         .carousel-control.prev {
-            left: 0;
+            left: 3px; /* Ajusta la posición a la izquierda */
         }
 
         .carousel-control.next {
-            right: 0;
+            right: 3px; /* Ajusta la posición a la derecha */
         }
     </style>
 </head>
@@ -170,11 +177,11 @@
 
 
 <div class="consulta-pedido" style="text-align: center; margin: 40px 0;">
-    <h1 class="gradient-text"></h1>
+    <h1 class="gradient-text"> Contamos con un amplio <span class="highlight">catalogo</span> de productos</h1>
     <button onclick="window.location.href='{{ url_for('catalogo') }}'" class="button-go-catalogo">Descubra más productos</button>
 </div>
 
-<h1>Lo <span class="highlight">más</span> vendido</h1>
+<!-- <h1>Lo <span class="highlight">más</span> vendido</h1>
 <div id="product-container">
     {% for producto in productos_mas_vendidos %}
     <div class="product">
@@ -186,7 +193,7 @@
         <button class="button" onclick="agregarAlCarrito('{{ producto.id }}', '{{ producto.nombre }}', '{{ producto.precio }}', '{{ producto.imagen }}')">Añadir al carrito</button>
     </div>
     {% endfor %}
-</div>
+</div> -->
 <div class="consulta-pedido" style="text-align: center; margin: 40px 0;">
     <h1 class="gradient-text">Consulta el estado de tu pedido</h1>
     <a href="{{ url_for('consulta_pedido') }}" class="button">Consultar mi pedido</a>
