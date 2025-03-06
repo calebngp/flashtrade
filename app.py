@@ -34,7 +34,7 @@ def home():
             "accesorios_tenis": [1, 16],  # IDs de ejemplo
             "accesorios_moto": [2, 3, 4],
             "decoracion_hogar": [17, 6],
-            "cuidado_personal": [7, 18]
+            "cuidado_personal": [18, 19]
         }
 
         productos_por_categoria = {}

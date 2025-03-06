@@ -12,28 +12,31 @@
 <div class="navbar">
     <div class="logo">
         <a href="{{ url_for('home') }}">
-            <span class="brand"><span class="fast">Cos</span><span class="highlight">Dent</span></span>
+            <span class="brand"><span class="fast">Fast</span><span class="highlight">Up</span></span>
         </a>
     </div>
 </div>
 
-    <h1>Catálogo</h1>
+<!-- Ícono del menú -->
+<div class="cart-icon" onclick="toggleCart()">
+    <img src="static/SVG/carrito.svg" alt="Menú">
+</div>
 
-    <!-- Ícono del carrito -->
-    <div class="cart-icon" onclick="toggleCart()">
-        <img src="static/SVG/carrito.svg" alt="Carrito de compras">
-    </div>
-
-    <!-- Carrito desplegable -->
-    <div class="cart-dropdown" id="cartDropdown">
+<!-- Carrito desplegable -->
+<div class="cart-dropdown" id="cartDropdown">
+    <div class="cart-header">
         <h2>Carrito</h2>
-        <ul id="cartList"></ul>
-        <p class="total-price">Total: <span id="totalPrice">0</span></p>
-        <div class="button-container">
-            <button class="button" onclick="window.location.href='{{ url_for('pedido') }}';">Ir a Pedido</button>
-            <button class="button" onclick="clearCart()">Vaciar carrito</button>
-        </div>
+        <button style="width: 170px;" class="button" onclick="window.location.href='{{ url_for('consulta_pedido') }}'">Consultar pedido</button>
     </div>
+    <ul id="cartList"></ul>
+    <p class="total-price">Total: <span id="totalPrice">0</span></p>
+    <div class="button-container">
+        <button class="button" onclick="window.location.href='{{ url_for('pedido') }}'">Ir a Pedido</button>
+        <button class="button" onclick="clearCart()">Vaciar carrito</button>
+    </div>
+</div>
+
+    <h1>Catálogo</h1>
 
     <div id="product-container"></div>
 
@@ -193,4 +196,4 @@
     </footer>    
     
 </body>
-</html>
+</html> 
