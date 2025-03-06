@@ -4,98 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirmación de Pedido</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #E1f5fe;
-            color: #142157;
-            text-align: center;
-        }
-        .container {
-            width: 400px;
-            margin: 50px auto;
-            background: #142157;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            color: white;
-        }
-        h1, h2 {
-            color: #E1f5fe;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-        }
-        .button {
-            background-color: #fb8500;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            cursor: pointer;
-            border: none;
-            border-radius: 10px;
-            width: 60%;
-        }
-        .button:hover {
-            background-color: #d17915;
-        }
-        @media (max-width: 600px) {
-            .container {
-                width: 85%; /* Ajusta el ancho del formulario para pantallas pequeñas */
-                margin: auto; /* Centra el formulario horizontalmente */
-                overflow-y: auto; /* Permite el desplazamiento vertical si el contenido es demasiado alto */
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Montserrat:ital,wght@1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Pedido Confirmado</h1>
-        <p><strong>Nombre:</strong> {{ nombre }}</p>
-        <p><strong>Teléfono:</strong> {{ telefono }}</p>
-        <p><strong>Cédula:</strong> {{ cedula }}</p>
-        <h2>Productos</h2>
-        <ul>
-            {% for producto, precio in productos_precios %}
-                <li>{{ producto }} - Gs. {{ precio }}</li>
-            {% endfor %}
-        </ul>
-        <p><strong>Total:</strong> Gs. {{ total_price }}</p>
-        <a href="/" class="button">Volver al catálogo</a>
-        
-        <!--
-        <script>
-            setTimeout(function() {
-                let mensaje = "Hola%20Flash%20Trade,%20este%20es%20mi%20pedido:%0D%0A" +
-                    "Nombre:%20{{ nombre }}%0D%0A" +
-                    "Teléfono:%20{{ telefono }}%0D%0A" +
-                    "Cédula:%20{{ cedula }}%0D%0A" +
-                    "Productos:%0D%0A";
-        
-                // Recorremos los productos y los agregamos al mensaje
-                {% for producto, precio in productos_precios %}
-                    mensaje += "{{ producto }}%20-%20Gs.%20{{ precio }}%0D%0A";
-                {% endfor %}
-        
-                // Agregamos el total al mensaje
-                mensaje += "Total:%20Gs.%20{{ total_price }}%0D%0A" +
-                    "Por%20favor,%20envíenme%20información%20para%20coordinar%20la%20entrega.";
-        
-                // Redirigimos a WhatsApp con el mensaje completo
-                window.location.href = "https://wa.me/595985924184?text=" + mensaje;
-            }, 5000);  // Espera 5 segundos antes de redirigir
-        </script>
-        -->
-        
+<!-- Barra de navegación -->
+<div class="navbar">
+    <div class="logo">
+        <a href="{{ url_for('home') }}">
+            <span class="brand"><span class="fast">Cos</span><span class="highlight">Dent</span></span>
+        </a>
     </div>
+</div>
+
+<!-- Contenido de la página -->
+<div class="form-container confirmacion" id="confirmacion">
+    <h1>Pago</h1>
+    <h2>Datos para Transferencia</h2>
+    <h3>Alias:<strong class="highlight2"> Caleb Gomez</strong></h3>
+    <h3>Teléfono:<strong class="highlight2"> 0985 924 184</strong></h3>
+    <h3>Banco:<strong class="highlight2"> Familiar</strong></h3>
+    <h3>Monto a transferir:<strong class="highlight2"> <span class="precio">{{ total_price }}</span> Gs</strong></h3>
+    <h2>Productos</h2>
+    <ul>
+        {% for producto, precio, cantidad, imagen in productos_precios %}
+            <li>
+                <div class="product-container-form">
+                    <img src="{{ imagen }}" alt="{{ producto }}">
+                    <div>
+                        <p><strong>{{ producto }}</strong></p>
+                        <p>Precio: <span class="precio">{{ precio }}</span> Gs</p>
+                        <p>Cantidad: {{ cantidad }}</p>
+                        <p>Sub total: <span class="precio">{{ precio * cantidad }}</span> Gs</p>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    <p><strong>Total:</strong> <span class="precio">{{ total_price }}</span> Gs</p>
+    <button id="sendMessage" class="submit-button button-form">Enviar Comprobante</button>
+    <button onclick="window.location.href='{{ url_for('catalogo') }}'" class="submit-button button-form">Volver al catálogo</button>
+    <button id="downloadImage" class="submit-button button-form">Descargar Detalles</button>
+</div>
+
+<script>
+    function formatPrice(price) {
+        if (price === undefined) {
+            return '0';
+        }
+        return price.toLocaleString('es-ES');
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll('.precio').forEach(function(element) {
+            element.textContent = formatPrice(parseInt(element.textContent));
+        });
+    });
+
+    document.getElementById('downloadImage').addEventListener('click', function() {
+        html2canvas(document.getElementById('confirmacion')).then(function(canvas) {
+            let link = document.createElement('a');
+            link.download = 'confirmacion_pedido.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    });
+
+    document.getElementById('sendMessage').addEventListener('click', function() {
+        const phoneNumber = '595985924184';
+        const message = encodeURIComponent('Hola, adjunto el comprobante de pago.');
+        window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+    });
+</script>
 </body>
 </html>

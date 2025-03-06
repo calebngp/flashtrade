@@ -3,9 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Montserrat:ital,wght@1,700&display=swap" rel="stylesheet">
+    <title>{{ producto.nombre }} - Detalle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
+    <style>
+        .container {
+            text-align: center;
+        }
+        h1 {
+            color: #142157;
+        }
+    </style>
 </head>
 <body>
 <!-- Barra de navegación -->
@@ -16,12 +24,9 @@
         </a>
     </div>
 </div>
-
-    <h1>Catálogo</h1>
-
     <!-- Ícono del carrito -->
     <div class="cart-icon" onclick="toggleCart()">
-        <img src="static/SVG/carrito.svg" alt="Carrito de compras">
+        <img src="/static/SVG/carrito.svg" alt="Carrito de compras">
     </div>
 
     <!-- Carrito desplegable -->
@@ -30,51 +35,28 @@
         <ul id="cartList"></ul>
         <p class="total-price">Total: <span id="totalPrice">0</span></p>
         <div class="button-container">
-            <button class="button" onclick="window.location.href='{{ url_for('pedido') }}';">Ir a Pedido</button>
+            <button class="button" onclick="window.location.href='{{ url_for('pedido') }}'">Ir a Pedido</button>
             <button class="button" onclick="clearCart()">Vaciar carrito</button>
         </div>
     </div>
 
-    <div id="product-container"></div>
-
+    <div class="form-container detalleproducto">
+        <h1 class="">{{ producto.nombre }}</h1>
+        <img class="detalle-img" src="{{ producto.imagen }}" alt="{{ producto.nombre }}">
+        <p class="detalle-price"> {{ producto.precio | format_price }} Gs</p>
+        <p class="detalle-descripcion">{{ producto.descripcion }}</p>
+        <button class="button" onclick="agregarAlCarrito('{{ producto.id }}', '{{ producto.nombre }}', '{{ producto.precio }}', '{{ producto.imagen }}')">Agregar al carrito</button>
+    </div>
+    <footer style="text-align: center; padding: 20px; background-color: #142157; color: aliceblue;">
+        <p class="gradient-text" style="font-size: 14px; font-weight: 300;">No contamos con tienda física, pero facilitamos nuestra dirección.</p>
+        <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Dirección: Ayolas entre Dr. Pedro y Dr. Juan, Cnel. Oviedo, Paraguay</p>
+        <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Teléfono: +595 985 924184</p>
+        <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Página en construcción.</p>
+    </footer>    
     <script>
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    document.addEventListener("DOMContentLoaded", async function () {
-        try {
-            const response = await fetch('/api/productos'); // Ruta de la API Flask
-            const productos = await response.json();
-            
-            console.log(productos); // Verificar la respuesta de la API
-
-            const productContainer = document.getElementById('product-container');
-            productContainer.innerHTML = ''; // Limpiar contenedor antes de renderizar
-
-            productos.forEach(producto => {
-                const productElement = document.createElement('div');
-                productElement.classList.add('product');
-                productElement.innerHTML = `
-                    <a href="/detalleproducto/${producto.id}">
-                        <img src="${producto.imagen}" alt="${producto.nombre}">
-                        <p>${producto.nombre}</p>
-                        <h3>${formatPrice(producto.precio)} Gs</h3>
-                    </a>
-                    <button class="button" onclick="agregarAlCarrito('${producto.id}', '${producto.nombre}', ${producto.precio}, '${producto.imagen}')">
-                        Agregar al carrito
-                    </button>
-                `;
-                productContainer.appendChild(productElement);
-            });
-
-            updateCart(); // Actualizar el carrito al cargar la página
-
-        } catch (error) {
-            console.error('Error cargando productos:', error);
-        }
-    });
-
     function agregarAlCarrito(id, nombre, precio, imagen) {
-
         let existingProduct = cart.find(item => item.id === id);
         if (existingProduct) {
             existingProduct.quantity += 1;
@@ -83,7 +65,7 @@
         }
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCart();
-        showNotification(nombre, formatPrice(precio));  // Muestra la notificación con el precio formateado
+        showNotification(nombre, formatPrice(precio));  // Muestra la notificación cuando se agrega un producto
     }
 
     function updateQuantity(id, change) {
@@ -96,13 +78,6 @@
         }
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCart();
-    }
-
-    function formatPrice(price) {
-        if (price === undefined) {
-            return '0';
-        }
-        return price.toLocaleString('es-ES');
     }
 
     function updateCart() {
@@ -173,6 +148,13 @@
         }, 2000); // La notificación se oculta después de 2 segundos.
     }
 
+    function formatPrice(price) {
+        if (price === undefined) {
+            return '0';
+        }
+        return price.toLocaleString('es-ES');
+    }
+
     window.onload = () => {
         updateCart();
     };
@@ -185,12 +167,5 @@
         }
     });
 </script>
-    <footer style="text-align: center; padding: 20px; background-color: #142157; color: aliceblue;">
-        <p class="gradient-text" style="font-size: 14px; font-weight: 300;">No contamos con tienda física, pero facilitamos nuestra dirección.</p>
-        <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Dirección: Ayolas entre Dr. Pedro y Dr. Juan, Cnel. Oviedo, Paraguay</p>
-        <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Teléfono: +595 985 924184</p>
-        <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Página en construcción.</p>
-    </footer>    
-    
 </body>
 </html>

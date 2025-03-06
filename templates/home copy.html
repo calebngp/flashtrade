@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Montserrat:ital,wght@1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
+</head>
+<body>
+<!-- Barra de navegación -->
+<div class="navbar">
+    <div class="logo">
+        <a href="{{ url_for('home') }}">
+            <span class="brand"><span class="fast">Fast</span><span class="highlight">Up</span></span>
+        </a>
+    </div>
+</div>
+
+<!-- Ícono del menú -->
+<div class="cart-icon" onclick="toggleCart()">
+    <img src="static/SVG/carrito.svg" alt="Menú">
+</div>
+
+<!-- Slogan -->
+<div class="slogan" style="margin: 60px 0;">
+    <div style="margin-left: 72px; display: inline-block;">
+        <p class="slogan1" id="slogan">Productos que no sabías que</p>
+    </div>
+    <div style="display: inline-block; width: 80px; text-align: center;">
+        <p class="slogan1"><span id="changing-word">necesitabas</span></p>
+    </div>
+</div>
+
+<h1 class="gradient-text">Categorías</h1>
+<div class="categories-container">
+    <div class="category">
+        <h3>Accesorios para tenis</h3>
+        <div class="product-container">
+            {% for producto in accesorios_tenis %}
+            <div class="product">
+                <a href="/detalleproducto/{{ producto.id }}">
+                    <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}">
+                    <p>{{ producto.nombre }}</p>
+                    <h3>{{ producto.precio | format_price }} Gs</h3>
+                </a>
+                <button class="button" onclick="agregarAlCarrito('{{ producto.id }}', '{{ producto.nombre }}', '{{ producto.precio }}', '{{ producto.imagen }}')">Añadir al carrito</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="category">
+        <h3>Accesorios para moto</h3>
+        <div class="product-container">
+            {% for producto in accesorios_moto %}
+            <div class="product">
+                <a href="/detalleproducto/{{ producto.id }}">
+                    <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}">
+                    <p>{{ producto.nombre }}</p>
+                    <h3>{{ producto.precio | format_price }} Gs</h3>
+                </a>
+                <button class="button" onclick="agregarAlCarrito('{{ producto.id }}', '{{ producto.nombre }}', '{{ producto.precio }}', '{{ producto.imagen }}')">Añadir al carrito</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="category">
+        <h3>Decoración para el hogar</h3>
+        <div class="product-container">
+            {% for producto in decoracion_hogar %}
+            <div class="product">
+                <a href="/detalleproducto/{{ producto.id }}">
+                    <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}">
+                    <p>{{ producto.nombre }}</p>
+                    <h3>{{ producto.precio | format_price }} Gs</h3>
+                </a>
+                <button class="button" onclick="agregarAlCarrito('{{ producto.id }}', '{{ producto.nombre }}', '{{ producto.precio }}', '{{ producto.imagen }}')">Añadir al carrito</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="category">
+        <h3>Cuidado personal</h3>
+        <div class="product-container">
+            {% for producto in cuidado_personal %}
+            <div class="product">
+                <a href="/detalleproducto/{{ producto.id }}">
+                    <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}">
+                    <p>{{ producto.nombre }}</p>
+                    <h3>{{ producto.precio | format_price }} Gs</h3>
+                </a>
+                <button class="button" onclick="agregarAlCarrito('{{ producto.id }}', '{{ producto.nombre }}', '{{ producto.precio }}', '{{ producto.imagen }}')">Añadir al carrito</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+    <!-- Carrito desplegable -->
+    <div class="cart-dropdown" id="cartDropdown">
+        <div class="cart-header">
+            <h2>Carrito</h2>
+            <button style="width: 170px;" class="button" onclick="window.location.href='{{ url_for('consulta_pedido') }}'">Consultar pedido</button>
+        </div>
+        <ul id="cartList"></ul>
+        <p class="total-price">Total: <span id="totalPrice">0</span></p>
+        <div class="button-container">
+            <button class="button" onclick="window.location.href='{{ url_for('pedido') }}'">Ir a Pedido</button>
+            <button class="button" onclick="clearCart()">Vaciar carrito</button>
+        </div>
+    </div>
+    <h1 class="gradient-text">Lo <span class="highlight">más</span> vendido</h1>
+    <div id="product-container">
+        {% for producto in productos %}
+        <div class="product">
+            <a href="/detalleproducto/{{ producto.id }}">
+                <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}">
+                <p>{{ producto.nombre }}</p>
+                <h3>{{ producto.precio | format_price }} Gs</h3>
+            </a>
+            <button class="button" onclick="agregarAlCarrito('{{ producto.id }}', '{{ producto.nombre }}', '{{ producto.precio }}', '{{ producto.imagen }}')">Añadir al carrito</button>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="consulta-pedido" style="text-align: center; margin: 40px 0;">
+        <h1 class="gradient-text">Consulta el estado de tu pedido</h1>
+        <a href="{{ url_for('consulta_pedido') }}" class="button">Consultar mi pedido</a>
+    </div>
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        function agregarAlCarrito(id, nombre, precio, imagen) {
+
+            let existingProduct = cart.find(item => item.id === id);
+            if (existingProduct) {
+                existingProduct.quantity += 1;
+            } else {
+                cart.push({ id, nombre, precio, imagen, quantity: 1 });
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCart();
+            showNotification(nombre, formatPrice(precio));  // Muestra la notificación cuando se agrega un producto
+        }
+
+        function updateQuantity(id, change) {
+            let item = cart.find(item => item.id === id);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(i => i.id !== id);
+                }
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCart();
+        }
+
+        function updateCart() {
+            let cartList = document.getElementById('cartList');
+            let totalPriceElement = document.getElementById('totalPrice');
+            cartList.innerHTML = '';
+            let totalGeneral = 0;
+
+            cart.forEach(item => {
+                let totalItem = item.precio * item.quantity;
+                totalGeneral += totalItem;
+                let listItem = document.createElement('li');
+                listItem.className = 'cart-item';
+                listItem.innerHTML = `
+                    <div class="item-info">
+                        <img src="${item.imagen}" width="50" alt="${item.nombre}">
+                        <div class="item-details">
+                            <strong>${item.nombre}</strong>
+                            <span class="item-price">${formatPrice(item.precio)} Gs</span>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button onclick="updateQuantity('${item.id}', -1)">➖</button>
+                        <span class="item-quantity">${item.quantity}</span>
+                        <button onclick="updateQuantity('${item.id}', 1)">➕</button>
+                        <span class="item-total"> ${formatPrice(totalItem)} Gs</span>
+                    </div>
+                `;
+                cartList.appendChild(listItem);
+            });
+
+            totalPriceElement.textContent = formatPrice(totalGeneral) + " Gs";
+        }
+
+        function clearCart() {
+            cart = [];
+            localStorage.removeItem('cart');
+            updateCart();
+            setTimeout(() => {
+                toggleCart();
+            }, 1000); // Oculta el carrito 1 segundo después de vaciarlo
+        }
+
+        function toggleMenu() {
+            const menuDropdown = document.getElementById('menuDropdown');
+            if (menuDropdown.style.display === 'none' || menuDropdown.style.display === '') {
+                menuDropdown.style.display = 'block';
+            } else {
+                menuDropdown.style.display = 'none';
+            }
+        }
+
+        function toggleCart() {
+            const cartDropdown = document.getElementById('cartDropdown');
+            const menuDropdown = document.getElementById('menuDropdown');
+            if (cartDropdown.style.display === 'none' || cartDropdown.style.display === '') {
+                cartDropdown.style.display = 'block';
+                menuDropdown.style.display = 'none'; // Oculta el menú cuando se muestra el carrito
+            } else {
+                cartDropdown.style.display = 'none';
+            }
+        }
+
+        function showNotification(product, price) {
+            let notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerText = `${product} añadido al carrito por ${price} Gs!`;
+            
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10); // De inmediato, mostrará la notificación.
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                notification.classList.add('hide');
+                setTimeout(() => notification.remove(), 500); // Elimina la notificación después de desaparecer
+            }, 2000); // La notificación se oculta después de 2 segundos.
+        }
+
+        function formatPrice(price) {
+            if (price === undefined) {
+                return '0';
+            }
+            return price.toLocaleString('es-ES');
+        }
+
+        window.onload = () => {
+            updateCart();
+        };
+
+        // Escuchar cambios en el almacenamiento local
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'cart') {
+                cart = JSON.parse(event.newValue) || [];
+                updateCart();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const sloganElement = document.getElementById('slogan');
+            let toggle = true;
+            setInterval(() => {
+                if (toggle) {
+                    sloganElement.innerHTML = sloganElement.innerHTML.replace('necesitabas', 'existían');
+                } else {
+                    sloganElement.innerHTML = sloganElement.innerHTML.replace('existían', 'necesitabas');
+                }
+                toggle = !toggle;
+            }, 2000); // Cambia la palabra cada 2 segundos
+        });
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const changingWordElement = document.getElementById('changing-word');
+            let toggle = true;
+            setInterval(() => {
+                if (toggle) {
+                    changingWordElement.textContent = 'existían';
+                } else {
+                    changingWordElement.textContent = 'necesitabas';
+                }
+                toggle = !toggle;
+            }, 2000); // Cambia la palabra cada 2 segundos
+        });
+    </script>
+    <footer style="text-align: center; padding: 20px; background-color: #142157; color: aliceblue;">
+        <p class="gradient-text" style="font-size: 14px; font-weight: 300;">No contamos con tienda física, pero facilitamos nuestra dirección.</p>
+        <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Dirección: Ayolas entre Dr. Pedro y Dr. Juan, Cnel. Oviedo, Paraguay</p>
+        <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Teléfono: +595 985 924184</p>
+        <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Página en construcción.</p>
+    </footer>    
+    
+</body>
+</html>
