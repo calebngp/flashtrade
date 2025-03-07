@@ -125,7 +125,7 @@ a {
     right: 20px;
     background-color: #01AEC7;
     width: 350px;
-    padding: 20px;
+    padding: 10px 20px;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 10;
@@ -292,7 +292,6 @@ a {
         background-color: #01AEC7;
     }
     .product img {
-        margin-top: 6px;
         max-width: 180px;
         max-height: 180px;
     }
@@ -320,21 +319,6 @@ a {
         background: linear-gradient(135deg, #01AEC7, #ff8149, #c980db);
         background-size: 400% 400%;
         animation: gradientAnimation 7s ease infinite; /* Animación más rápida */
-        color: white;
-        padding: 10px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        cursor: pointer;
-        border: none;
-        border-radius: 10px;
-        width: 85%;
-        font-size: 26px;
-    }
-    .button-go-catalogo:hover {
-        background: linear-gradient(135deg, #01AEC7, #ff8149, #c980db);
-        background-size: 400% 400%;
-        animation: gradientAnimation 1s ease infinite; /* Animación más rápida */
         color: white;
         padding: 10px;
         text-align: center;
@@ -398,6 +382,10 @@ a {
     align-items: center;
     margin-bottom: 10px;
     width: 100%;
+}
+.item-info img{
+    width: 80px;
+    height: 80px;
 }
 
 .item-details {
@@ -495,6 +483,21 @@ a {
 }
 
 @media (min-width: 601px) {
+    .button-go-catalogo {
+        background: linear-gradient(135deg, #01AEC7, #ff8149, #c980db);
+        background-size: 400% 400%;
+        animation: gradientAnimation 7s ease infinite; /* Animación más rápida */
+        color: white;
+        padding: 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        border: none;
+        border-radius: 10px;
+        width: 85%;
+        font-size: 26px;
+    }
     .form-container {
         width: 400px;
         margin: auto;
@@ -516,7 +519,7 @@ a {
         margin-left: 72px;
     }
     .category {
-        background-color: #00beae;
+        background-color: #01AEC7;
         color: white;
         padding: 5px;
         margin: 10px;
@@ -527,16 +530,13 @@ a {
         max-width: 290px;
     }
 }
-.cart-dropdown {
-    width: 85%;
-    right: 2%;
-    top: 60px;
-    overflow-y: auto;
-}
 .cart-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+.cart-header h2 {
+    margin: 10px 0px;
 }
 
 .cart-header .button {
