@@ -8,49 +8,53 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
 </head>
 <body>
-    <!-- Barra de navegación -->
-    <div class="navbar">
-        <div class="logo">
-            <a href="{{ url_for('home') }}">
-                <span class="brand"><span class="fast">Cos</span><span class="highlight">Dent</span></span>
-            </a>
+<!-- Barra de navegación -->
+<!-- Barra de navegación -->
+<div class="navbar">
+    <div class="logo">
+        <a href="{{ url_for('home') }}">
+            <span class="brand"><span class="fast">Cos</span><span class="highlight">Dent</span></span>
+        </a>
+    </div>
+</div>
+
+
+
+<div class="form-container">
+    <h1>Formulario de Pedido</h1>
+    <form action="/pedido" method="POST">
+        <div class="input-group">
+            <label for="name">Nombre:</label>
+            <input type="text" id="name" name="name" required>
         </div>
-    </div>
-    <div class="form-container">
-        <h1>Formulario de Pedido</h1>
-        <form action="/pedido" method="POST">
-            <div class="input-group">
-                <label for="name">Nombre:</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            <div class="input-group">
-                <label for="phone">Número de Teléfono:</label>
-                <input type="text" id="phone" name="phone" required>
-            </div>
-            <div class="input-group">
-                <label for="cedula">Cédula:</label>
-                <input type="text" id="cedula" name="cedula" required>
-            </div>
+        <div class="input-group">
+            <label for="phone">Número de Teléfono:</label>
+            <input type="text" id="phone" name="phone" required>
+        </div>
+        <div class="input-group">
+            <label for="cedula">Cédula:</label>
+            <input type="text" id="cedula" name="cedula" required>
+        </div>
 
-            <h3>Detalles del Pedido</h3>
-            <div id="orderDetails"></div>
-            
-            <p><strong>Total:</strong> <span id="total_price">0.00</span></p>
-            <input type="hidden" name="productName" id="hiddenProductName">
-            <input type="hidden" name="productPrice" id="hiddenProductPrice">
-            <input type="hidden" name="cantidad" id="hiddenCantidad">
-            <input type="hidden" name="total_price" id="hiddenTotal_price">
-            <input type="hidden" name="productImage" id="hiddenProductImage">
+        <h3>Detalles del Pedido</h3>
+        <div id="orderDetails"></div>
+        
+        <p><strong>Total:</strong> <span id="total_price">0.00</span></p>
+        <input type="hidden" name="productName" id="hiddenProductName">
+        <input type="hidden" name="productPrice" id="hiddenProductPrice">
+        <input type="hidden" name="cantidad" id="hiddenCantidad">
+        <input type="hidden" name="total_price" id="hiddenTotal_price">
+        <input type="hidden" name="productImage" id="hiddenProductImage">
 
-            <button type="submit" class="button-form submit-button">Enviar Pedido</button>
-        </form>
-    </div>
-    <footer style="text-align: center; padding: 20px; background-color: #142157; color: aliceblue;">
-        <p class="gradient-text" style="font-size: 14px; font-weight: 300;">No contamos con tienda física, pero facilitamos nuestra dirección.</p>
-        <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Dirección: Ayolas entre Dr. Pedro y Dr. Juan, Cnel. Oviedo, Paraguay</p>
-        <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Teléfono: +595 985 924184</p>
-        <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Página en construcción.</p>
-    </footer> 
+        <button type="submit" class="button-form submit-button">Enviar Pedido</button>
+    </form>
+</div>
+<footer>
+    <p class="gradient-text" style="font-size: 14px; font-weight: 300;">No contamos con tienda física, pero facilitamos nuestra dirección para retiro de productos.</p>
+    <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Dirección: Caraguatay entre Chivato y Monseñor, Lambare - Paraguay</p>
+    <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Teléfono: +595 985 924184</p>
+    <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Disculpe los errores - Página en construcción.</p>
+</footer>  
     <script>
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let total = 0;
@@ -60,6 +64,7 @@
             cart.forEach(item => {
                 // Asegúrate de que la cantidad sea un número válido y no vacío
                 item.quantity = item.quantity === "" || isNaN(item.quantity) ? 0 : parseInt(item.quantity);
+                item.precio = parseFloat(item.precio); // Asegúrate de que el precio sea un número
     
                 // Calcula el total por cada producto considerando su cantidad
                 let totalItem = item.precio * item.quantity;

@@ -1,8 +1,3 @@
-@font-face {
-    font-family: 'Montserrat';
-    src: url('static/fonts/Montserrat-Regular.ttf') format('truetype');
-}
-
 body {
     font-family: 'Montserrat', sans-serif;
     background-color: white;
@@ -223,18 +218,15 @@ a {
         top: 60px;
         right: 2%;
         margin: auto;
-        margin-bottom: 20px;
-        background: linear-gradient(135deg, #FBC2EB, #78A3EB);
-        background-size: 400% 400%;
-        animation: gradientAnimation 10s ease infinite;
-        padding: 20px;
+        background-color: #01AEC7;
+        padding: 10px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        color: #142157;
+        color: white;
         margin-bottom: 20px;
     }
     .form-container h1 {
-        color: #142157;
+        color: white;
         font-size: 28px;
     }
     .detalleproducto {
@@ -273,8 +265,8 @@ a {
         margin-bottom: 20px;
     }
     .product-container-form img {
-        width: 60px;
-        height: 60px;
+        width: 110px;
+        height: 110px;
         margin-right: 10px;
         border-radius: 5px;
         object-fit: cover;
@@ -498,21 +490,26 @@ a {
     color: #ff8149;
 }
 .highlight2 {
-    color: #7258a5;
+    background-color: #ff8149;
 }
 
 @media (min-width: 601px) {
     .form-container {
         width: 400px;
         margin: auto;
-        background: linear-gradient(135deg, #FBC2EB, #78A3EB);
-        background-size: 400% 400%;
-        animation: gradientAnimation 10s ease infinite;
+        background-color: #01AEC7;
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        color: #142157;
+        color: white;
         margin-bottom: 40px;
+    }
+    .product-container-form img {
+        width: 130px;
+        height: 130px;
+        margin-right: 10px;
+        border-radius: 5px;
+        object-fit: cover;
     }
     .slogan-div1{
         margin-left: 72px;
@@ -545,20 +542,13 @@ a {
     margin: 0 5px;
 }
 .form-container h1 {
-    color: #142157;
+    color: white;
 }
 .product-container-form {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
     border-bottom: 1px solid #ddd;
-}
-.product-container-form img {
-    width: 100px;
-    height: 100px;
-    margin-right: 10px;
-    border-radius: 5px;
-    object-fit: cover;
 }
 .button-form {
     margin-bottom: 6px;
@@ -570,7 +560,7 @@ a {
 .submit-button {
     display: block;
     margin: 10px auto;
-    background: linear-gradient(135deg, #CFCBD2, #CB98ED, #8B63DA, #3C21B7);
+    background: linear-gradient(135deg, #01AEC7, #ff8149, #c980db);
     background-size: 400% 400%;
     animation: gradientAnimation 7s ease infinite; /* Animación más rápida */
     color: white;
