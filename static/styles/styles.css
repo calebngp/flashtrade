@@ -127,9 +127,7 @@ a {
     position: fixed;
     top: 60px;
     right: 20px;
-    background: linear-gradient(135deg, #FBC2EB, #78A3EB);
-    background-size: 400% 400%;
-    animation: gradientAnimation 10s ease infinite;
+    background-color: #01AEC7;
     width: 350px;
     padding: 20px;
     border-radius: 10px;
@@ -155,11 +153,11 @@ a {
     align-items: flex-start;
     margin-bottom: 10px;
     padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-}
+    border: 1px solid white;
+    border-radius: 5px;;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Añade una sombra al carrito */
 
+}
 .cart-dropdown button {
     background-color: #ffffff;
     color: white;
@@ -179,7 +177,7 @@ a {
     position: fixed;
     top: 20px;
     right: 20px;
-    background-color: #142157;
+    background-color: #00beae;
     color: aliceblue;
     padding: 10px 20px;
     border-radius: 5px;
@@ -398,7 +396,8 @@ a {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    background-color: #f9f9f9;
+    color: white;
+    background-color: #01AEC7;
 }
 
 .item-info {
@@ -643,8 +642,8 @@ li {
 footer {
     text-align: center;
     padding: 20px;
-    background-color: #142157;
-    color: aliceblue;
+    background-color: #01AEC7;
+    color: white;
 }
 
 footer p {

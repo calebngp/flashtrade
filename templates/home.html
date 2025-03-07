@@ -173,13 +173,19 @@
         </div>
     </div>
 </div>
-
-
-
-<div class="consulta-pedido" style="text-align: center; margin: 40px 0;">
-    <h1 class="gradient-text"> Contamos con un amplio <span class="highlight">catalogo</span> de productos</h1>
-    <button onclick="window.location.href='{{ url_for('catalogo') }}'" class="button-go-catalogo">Descubra más productos</button>
+<div class="consulta-pedido" style="text-align: center; margin: 80px 0;">
+    <button id="toggleButton" onclick="window.location.href='{{ url_for('catalogo') }}'" class="button-go-catalogo">Descubra más productos</button>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggleButton = document.getElementById('toggleButton');
+        let toggle = true;
+        setInterval(() => {
+            toggleButton.textContent = toggle ? 'Click aquí' : 'Descubra más productos';
+            toggle = !toggle;
+        }, 2000); // Cambia el texto cada 2 segundos
+    });
+</script>
 
 <!-- <h1>Lo <span class="highlight">más</span> vendido</h1>
 <div id="product-container">
@@ -194,10 +200,20 @@
     </div>
     {% endfor %}
 </div> -->
-<div class="consulta-pedido" style="text-align: center; margin: 40px 0;">
-    <h1 class="gradient-text">Consulta el estado de tu pedido</h1>
-    <a href="{{ url_for('consulta_pedido') }}" class="button">Consultar mi pedido</a>
+<div class="consulta-pedido" style="text-align: center; margin-top: 80px;">
+    <h1 class="gradient-text">¿Pediste algo?</h1>
 </div>
+
+<div class="consulta-pedido" style="text-align: center; margin-top: 20px; margin-bottom: 60px;">
+    <button onclick="window.location.href='{{ url_for('consulta_pedido') }}'" class="button-go-catalogo">Consultar estado</button>
+</div>
+<footer>
+    <p class="gradient-text" style="font-size: 14px; font-weight: 300;">No contamos con tienda física, pero facilitamos nuestra dirección para retiro de productos.</p>
+    <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Dirección: Caraguatay entre Chivato y Monseñor, Lambare - Paraguay</p>
+    <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Teléfono: +595 985 924184</p>
+    <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Disculpe los errores - Página en construcción.</p>
+</footer>  
+
 <script>
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
@@ -381,13 +397,6 @@
             }, 6000); // Cambia el producto cada 2 segundos
         });
     });
-</script>
-<footer style="text-align: center; padding: 20px; background-color: #142157; color: aliceblue;">
-    <p class="gradient-text" style="font-size: 14px; font-weight: 300;">No contamos con tienda física, pero facilitamos nuestra dirección.</p>
-    <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Dirección: Ayolas entre Dr. Pedro y Dr. Juan, Cnel. Oviedo, Paraguay</p>
-    <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Teléfono: +595 985 924184</p>
-    <p class="gradient-text" style="font-size: 14px; font-weight: 300;">Página en construcción.</p>
-</footer>    
-
+</script> 
 </body>
 </html>
