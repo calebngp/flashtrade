@@ -120,15 +120,17 @@
             });
             doc.text(`Total: ${total}`, 10, 20 + (items.length * 10));
 
-            // Convertir el PDF a un Blob
+            // Convertir el PDF a un Blob y crear un enlace de descarga
             const pdfBlob = doc.output('blob');
-
-            // Crear un enlace para el PDF
             const pdfUrl = URL.createObjectURL(pdfBlob);
+            const a = document.createElement('a');
+            a.href = pdfUrl;
+            a.download = 'presupuesto.pdf';
+            a.click();
 
             // Crear el mensaje de WhatsApp
-            let mensaje = "Presupuesto adjunto en PDF.";
-            let url = `https://wa.me/595${telefono}?text=${encodeURIComponent(mensaje)}&attachment=${encodeURIComponent(pdfUrl)}`;
+            let mensaje = "Presupuesto adjunto en PDF. Descárguelo desde el siguiente enlace: " + pdfUrl;
+            let url = `https://wa.me/595${telefono}?text=${encodeURIComponent(mensaje)}`;
             window.open(url, "_blank");
         }
     </script>
