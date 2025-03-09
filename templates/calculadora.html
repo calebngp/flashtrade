@@ -4,83 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Presupuesto</title>
-    <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            text-align: center; 
-            background-color: #f4f4f9; 
-            color: #333; 
-        }
-        .container { 
-            max-width: 400px; 
-            margin: auto; 
-            background: #fff; 
-            padding: 20px; 
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-            border-radius: 8px; 
-        }
-        input, button { 
-            margin: 5px 0; 
-            padding: 10px; 
-            width: calc(100% - 22px); 
-            border: 1px solid #ccc; 
-            border-radius: 4px; 
-        }
-        button { 
-            background-color: #28a745; 
-            color: #fff; 
-            cursor: pointer; 
-            transition: background-color 0.3s ease; 
-        }
-        button:hover { 
-            background-color: #218838; 
-        }
-        table { 
-            width: 100%; 
-            margin-top: 10px; 
-            border-collapse: collapse; 
-        }
-        th, td { 
-            padding: 10px; 
-            text-align: left; 
-            border-bottom: 1px solid #ddd; 
-        }
-        th { 
-            background-color: #f8f9fa; 
-        }
-        h2 { 
-            margin-bottom: 20px; 
-        }
-        h3 { 
-            margin-top: 20px; 
-        }
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f9; color: #333; }
+        .container { max-width: 400px; margin: auto; background: #fff; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px; }
+        input, button { margin: 5px 0; padding: 10px; width: calc(100% - 22px); border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #28a745; color: #fff; cursor: pointer; transition: background-color 0.3s ease; }
+        button:hover { background-color: #218838; }
+        table { width: 100%; margin-top: 10px; border-collapse: collapse; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f8f9fa; }
+        h2, h3 { margin-bottom: 20px; }
+        #presupuesto { padding: 20px; background: white; display: inline-block; text-align: left; }
+    </style>
 </head>
 <body>
-    <div class="container" id="presupuesto">
+    <div class="container">
         <h2>Calculadora de Presupuesto</h2>
         <input type="text" id="item" placeholder="Ítem">
         <input type="number" id="monto" placeholder="Monto">
         <input type="tel" id="telefono" placeholder="Número de teléfono Ej: 0985123456">
         <button onclick="agregarItem()">Agregar</button>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Ítem</th>
-                    <th>Monto</th>
-                </tr>
-            </thead>
-            <tbody id="lista"></tbody>
-        </table>
-        <h3>Total: <span id="total">0</span></h3>
-        <button onclick="enviarWhatsApp()">Enviar por WhatsApp</button>
+        <div id="presupuesto">
+            <img src="logo.png" alt="Logo" width="100">
+            <p id="fecha"></p>
+            <table border="1">
+                <thead><tr><th>Ítem</th><th>Monto</th></tr></thead>
+                <tbody id="lista"></tbody>
+            </table>
+            <h3>Total: <span id="total">0</span></h3>
+        </div>
+        <button onclick="generarImagen()">Generar Imagen y Enviar</button>
     </div>
     <script>
-        let total = 0;
-        let items = [];
-        
+        let total = 0, items = [];
         function agregarItem() {
             let item = document.getElementById("item").value;
             let monto = parseFloat(document.getElementById("monto").value);
@@ -90,43 +47,32 @@
                 actualizarLista();
             }
         }
-        
         function actualizarLista() {
             let lista = document.getElementById("lista");
             lista.innerHTML = "";
             items.forEach(i => {
-                let fila = `<tr><td>${i.item}</td><td>${i.monto}</td></tr>`;
-                lista.innerHTML += fila;
+                lista.innerHTML += `<tr><td>${i.item}</td><td>${i.monto}</td></tr>`;
             });
             document.getElementById("total").innerText = total;
+            document.getElementById("fecha").innerText = new Date().toLocaleString();
         }
-        
-        async function enviarWhatsApp() {
+        function generarImagen() {
+            html2canvas(document.getElementById("presupuesto")).then(canvas => {
+                let link = document.createElement('a');
+                let nombreArchivo = `presupuesto_${Date.now()}.png`;
+                link.download = nombreArchivo;
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+                enviarWhatsApp(link.href);
+            });
+        }
+        function enviarWhatsApp(imagenUrl) {
             let telefono = document.getElementById("telefono").value;
-            if (!telefono) {
-                alert("Por favor, ingrese un número de teléfono.");
-                return;
-            }
-            // Eliminar el cero inicial si existe
-            if (telefono.startsWith("0")) {
-                telefono = telefono.substring(1);
-            }
-
-            // Capturar la imagen del presupuesto
-            const presupuestoElement = document.getElementById("presupuesto");
-            const canvas = await html2canvas(presupuestoElement);
-            const imgData = canvas.toDataURL("image/png");
-
-            // Crear el mensaje de WhatsApp
-            let mensaje = "Presupuesto adjunto en imagen.";
+            if (!telefono) { alert("Ingrese un número de teléfono"); return; }
+            if (telefono.startsWith("0")) { telefono = telefono.substring(1); }
+            let mensaje = `Presupuesto:\n${items.map(i => `${i.item}: ${i.monto}`).join('\n')}\nTotal: ${total}`;
             let url = `https://wa.me/595${telefono}?text=${encodeURIComponent(mensaje)}`;
-            window.open(url, "_blank");
-
-            // Crear un enlace de descarga para la imagen
-            const a = document.createElement('a');
-            a.href = imgData;
-            a.download = 'presupuesto.png';
-            a.click();
+            setTimeout(() => { window.open(url, "_blank"); }, 500);
         }
     </script>
 </body>
