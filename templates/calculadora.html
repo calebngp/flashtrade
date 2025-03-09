@@ -55,6 +55,7 @@
             margin-top: 20px; 
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -99,7 +100,7 @@
             document.getElementById("total").innerText = total;
         }
         
-        function enviarWhatsApp() {
+        async function enviarWhatsApp() {
             let telefono = document.getElementById("telefono").value;
             if (!telefono) {
                 alert("Por favor, ingrese un número de teléfono.");
@@ -109,9 +110,25 @@
             if (telefono.startsWith("0")) {
                 telefono = telefono.substring(1);
             }
-            let mensaje = "Presupuesto:\n" + items.map(i => `${i.item}: ${i.monto}`).join("\n");
-            mensaje += `\nTotal: ${total}`;
-            let url = `https://wa.me/595${telefono}?text=${encodeURIComponent(mensaje)}`;
+
+            // Generar el PDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text("Presupuesto", 10, 10);
+            items.forEach((item, index) => {
+                doc.text(`${item.item}: ${item.monto}`, 10, 20 + (index * 10));
+            });
+            doc.text(`Total: ${total}`, 10, 20 + (items.length * 10));
+
+            // Convertir el PDF a un Blob
+            const pdfBlob = doc.output('blob');
+
+            // Crear un enlace para el PDF
+            const pdfUrl = URL.createObjectURL(pdfBlob);
+
+            // Crear el mensaje de WhatsApp
+            let mensaje = "Presupuesto adjunto en PDF.";
+            let url = `https://wa.me/595${telefono}?text=${encodeURIComponent(mensaje)}&attachment=${encodeURIComponent(pdfUrl)}`;
             window.open(url, "_blank");
         }
     </script>
