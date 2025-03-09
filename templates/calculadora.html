@@ -56,9 +56,10 @@
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="presupuesto">
         <h2>Calculadora de Presupuesto</h2>
         <input type="text" id="item" placeholder="Ítem">
         <input type="number" id="monto" placeholder="Monto">
@@ -111,27 +112,21 @@
                 telefono = telefono.substring(1);
             }
 
-            // Generar el PDF
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text("Presupuesto", 10, 10);
-            items.forEach((item, index) => {
-                doc.text(`${item.item}: ${item.monto}`, 10, 20 + (index * 10));
-            });
-            doc.text(`Total: ${total}`, 10, 20 + (items.length * 10));
-
-            // Convertir el PDF a un Blob y crear un enlace de descarga
-            const pdfBlob = doc.output('blob');
-            const pdfUrl = URL.createObjectURL(pdfBlob);
-            const a = document.createElement('a');
-            a.href = pdfUrl;
-            a.download = 'presupuesto.pdf';
-            a.click();
+            // Capturar la imagen del presupuesto
+            const presupuestoElement = document.getElementById("presupuesto");
+            const canvas = await html2canvas(presupuestoElement);
+            const imgData = canvas.toDataURL("image/png");
 
             // Crear el mensaje de WhatsApp
-            let mensaje = "Presupuesto adjunto en PDF. Descárguelo desde el siguiente enlace: " + pdfUrl;
+            let mensaje = "Presupuesto adjunto en imagen.";
             let url = `https://wa.me/595${telefono}?text=${encodeURIComponent(mensaje)}`;
             window.open(url, "_blank");
+
+            // Crear un enlace de descarga para la imagen
+            const a = document.createElement('a');
+            a.href = imgData;
+            a.download = 'presupuesto.png';
+            a.click();
         }
     </script>
 </body>
