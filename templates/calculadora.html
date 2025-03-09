@@ -61,6 +61,7 @@
         <h2>Calculadora de Presupuesto</h2>
         <input type="text" id="item" placeholder="Ítem">
         <input type="number" id="monto" placeholder="Monto">
+        <input type="tel" id="telefono" placeholder="Número de teléfono Ej: 0985123456">
         <button onclick="agregarItem()">Agregar</button>
         <table border="1">
             <thead>
@@ -99,9 +100,18 @@
         }
         
         function enviarWhatsApp() {
+            let telefono = document.getElementById("telefono").value;
+            if (!telefono) {
+                alert("Por favor, ingrese un número de teléfono.");
+                return;
+            }
+            // Eliminar el cero inicial si existe
+            if (telefono.startsWith("0")) {
+                telefono = telefono.substring(1);
+            }
             let mensaje = "Presupuesto:\n" + items.map(i => `${i.item}: ${i.monto}`).join("\n");
             mensaje += `\nTotal: ${total}`;
-            let url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
+            let url = `https://wa.me/595${telefono}?text=${encodeURIComponent(mensaje)}`;
             window.open(url, "_blank");
         }
     </script>
