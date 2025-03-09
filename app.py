@@ -356,6 +356,9 @@ def consulta_pedido():
 def consulta_pedido_form():
     return render_template('consulta_pedido.html')
 
+@app.route('/calculadora')
+def calculadora():
+    return render_template('calculadora.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

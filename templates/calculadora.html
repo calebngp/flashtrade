@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Presupuesto</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background-color: #f4f4f9; 
+            color: #333; 
+        }
+        .container { 
+            max-width: 400px; 
+            margin: auto; 
+            background: #fff; 
+            padding: 20px; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+            border-radius: 8px; 
+        }
+        input, button { 
+            margin: 5px 0; 
+            padding: 10px; 
+            width: calc(100% - 22px); 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+        }
+        button { 
+            background-color: #28a745; 
+            color: #fff; 
+            cursor: pointer; 
+            transition: background-color 0.3s ease; 
+        }
+        button:hover { 
+            background-color: #218838; 
+        }
+        table { 
+            width: 100%; 
+            margin-top: 10px; 
+            border-collapse: collapse; 
+        }
+        th, td { 
+            padding: 10px; 
+            text-align: left; 
+            border-bottom: 1px solid #ddd; 
+        }
+        th { 
+            background-color: #f8f9fa; 
+        }
+        h2 { 
+            margin-bottom: 20px; 
+        }
+        h3 { 
+            margin-top: 20px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Calculadora de Presupuesto</h2>
+        <input type="text" id="item" placeholder="Ítem">
+        <input type="number" id="monto" placeholder="Monto">
+        <button onclick="agregarItem()">Agregar</button>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Ítem</th>
+                    <th>Monto</th>
+                </tr>
+            </thead>
+            <tbody id="lista"></tbody>
+        </table>
+        <h3>Total: <span id="total">0</span></h3>
+        <button onclick="enviarWhatsApp()">Enviar por WhatsApp</button>
+    </div>
+    <script>
+        let total = 0;
+        let items = [];
+        
+        function agregarItem() {
+            let item = document.getElementById("item").value;
+            let monto = parseFloat(document.getElementById("monto").value);
+            if (item && monto) {
+                items.push({ item, monto });
+                total += monto;
+                actualizarLista();
+            }
+        }
+        
+        function actualizarLista() {
+            let lista = document.getElementById("lista");
+            lista.innerHTML = "";
+            items.forEach(i => {
+                let fila = `<tr><td>${i.item}</td><td>${i.monto}</td></tr>`;
+                lista.innerHTML += fila;
+            });
+            document.getElementById("total").innerText = total;
+        }
+        
+        function enviarWhatsApp() {
+            let mensaje = "Presupuesto:\n" + items.map(i => `${i.item}: ${i.monto}`).join("\n");
+            mensaje += `\nTotal: ${total}`;
+            let url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, "_blank");
+        }
+    </script>
+</body>
+</html>
